@@ -2,10 +2,12 @@
   <div id="app" class="container">
     <img src="./assets/logo.png" class="logo">
     <todo-list></todo-list>
+    <!--<p>The safely stored number: {{safelyStoredNumber}}</p>-->
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import TodoList from './components/TodoList';
 
 
@@ -35,6 +37,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  font-size: 24px;
 }
 
 .logo{

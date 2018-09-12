@@ -5,8 +5,9 @@
 
     <transition-group name="fade" enter-active-class="animated fadeInUp"
     leave-active-class="animated fadeOutDown">
-      <div v-for="(todo, index) in todosFiltered" :key="todo.id" class="todo-item">
-        <div class="todo-item-left">
+      <todo-item v-for="(todo, index) in todosFiltered" :key="todo.id"
+      :todo="todo" :index="index" :checkAll="!anyRemaining" @removedTodo ="removeTodo" @finishedEdit="finishedEdit">
+        <!-- <div class="todo-item-left">
           <input type="checkbox" v-model="todo.completed">
           <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label"
           :class="{ completed : todo.completed }">
@@ -18,8 +19,8 @@
         </div>
         <div class="remove-item" @click="removeTodo(index)">
           &times;
-        </div>
-      </div>
+        </div> -->
+      </todo-item>
     </transition-group>
 
     <div class="extra-container">
@@ -53,8 +54,13 @@
 
 <script>
 
+import TodoItem from './TodoItem'
+
 export default {
   name: 'todo-list',
+  components: {
+    TodoItem,
+  },
   data () {
     return {
       newTodo: '',
@@ -113,14 +119,6 @@ export default {
       return this.todos.filter(todo => todo.completed).length > 0;
     }
   },
-  directives: {
-  focus: {
-    // directive definition
-    inserted: function (el) {
-      el.focus()
-    }
-  }
-},
   methods:{
     addTodo(){
       if(this.newTodo.trim() == 0){
@@ -138,25 +136,14 @@ export default {
     removeTodo (index) {
       this.todos.splice(index,1);
     },
-    editTodo(todo){
-      this.beforeEditCache = todo.title;
-      todo.editing = true;
-    },
-    doneEdit(todo){
-      if(todo.title.trim() == ''){
-        todo.title = this.beforeEditCache;
-      }
-      todo.editing = false;
-    },
-    cancelEdit(todo){
-      todo.editing = false;
-      todo.title = this.beforeEditCache;
-    },
     checkAllTodos(){
       this.todos.forEach((todo) => todo.completed = event.target.checked );
     },
     clearCompleted(){
       this.todos = this.todos.filter(todo => !todo.completed);
+    },
+    finishedEdit(data){
+      this.todos.splice(data.index, 1, data.todo);
     },
     incrementGlobalCounter(){
       this.$store.store.commit('increment');

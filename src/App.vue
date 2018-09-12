@@ -1,20 +1,22 @@
 <template>
   <div id="app" class="container">
-    <img src="./assets/logo.png" class="logo">
+    <img src="./assets/Ma-icon-bluesmall.png" class="logo">
     <todo-list></todo-list>
-    <!--<p>The safely stored number: {{safelyStoredNumber}}</p>-->
+   <!--<p>The safely stored number: {{safelyStoredNumber}}<p>-->
+
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+//import { mapGetters } from 'vuex'
 import TodoList from './components/TodoList';
-
+//import store from './store/index';
 
 export default {
   name: 'app',
   components:{
     TodoList,
+    //store
   }
 }
 </script>
@@ -43,7 +45,7 @@ export default {
 .logo{
   display:block;
   margin: 20px auto;
-  height: 75px;
+
 }
 
 h1, h2 {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" class="todo-input" placeholder="What need to be done"
+    <input type="text" class="todo-input" placeholder="Enter new todos..."
     v-model="newTodo" @keyup.enter="addTodo">
     <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
       <div class="todo-item-left">
@@ -22,7 +22,7 @@
       <div>
         <label>
           <input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">
-          Check All
+          Select all
         </label>
       </div>
 
@@ -45,13 +45,25 @@ export default {
       todos:[
         {
           'id': 1,
-          'title': 'Finish Vue Screencase',
+          'title': 'Git commands & workflow',
           'completed': false,
           'editing': false,
         },
         {
           'id':2,
-          'title': 'Take over world',
+          'title': 'Vuex core concepts',
+          'completed':false,
+          'editing': false,
+        },
+        {
+          'id':3,
+          'title': 'Update TodoApp',
+          'completed':false,
+          'editing': false,
+        },
+        {
+          'id':4,
+          'title': 'practise Vue, JS, SASS, npm & shell...',
           'completed':false,
           'editing': false,
         },

@@ -9,7 +9,10 @@ const store = new Vuex.Store({
   },
   mutations: {
     increment (state) {
-      state.count++
+      state.count++;
+    },
+    addFixedAmount(state, data){
+      state.count = state.count + data;
     }
   }
 })
@@ -17,5 +20,3 @@ const store = new Vuex.Store({
 export default{
     store,
 }
-
-//export default new Vuex.Store();

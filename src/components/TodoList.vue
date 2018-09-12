@@ -2,35 +2,53 @@
   <div>
     <input type="text" class="todo-input" placeholder="Enter new todos..."
     v-model="newTodo" @keyup.enter="addTodo">
-    <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
-      <div class="todo-item-left">
-        <input type="checkbox" v-model="todo.completed">
-        <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label"
-        :class="{ completed : todo.completed }">
-          {{ todo.title }}
+
+    <transition-group name="fade" enter-active-class="animated fadeInUp"
+    leave-active-class="animated fadeOutDown">
+      <div v-for="(todo, index) in todosFiltered" :key="todo.id" class="todo-item">
+        <div class="todo-item-left">
+          <input type="checkbox" v-model="todo.completed">
+          <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label"
+          :class="{ completed : todo.completed }">
+            {{ todo.title }}
+          </div>
+          <input v-else class="todo-item-edit" type="text" v-model="todo.title"
+          @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)"
+          @keyup.escape="cancelEdit(todo)" v-focus>
         </div>
-        <input v-else class="todo-item-edit" type="text" v-model="todo.title"
-        @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)"
-        @keyup.escape="cancelEdit(todo)" v-focus>
+        <div class="remove-item" @click="removeTodo(index)">
+          &times;
+        </div>
       </div>
-      <div class="remove-item" @click="removeTodo(index)">
-        &times;
+    </transition-group>
+
+    <div class="extra-container">
+      <div>
+        <label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">
+          Select all</label>
       </div>
+      <div>{{remaining}} items left</div>
     </div>
 
     <div class="extra-container">
       <div>
-        <label>
-          <input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">
-          Select all
-        </label>
+        <button :class="{ active: filter == 'all'}" @click="filter = 'all'">All</button>
+        <button :class="{ active: filter == 'active'}" @click="filter = 'active'">Active</button>
+        <button :class="{ active: filter == 'completed'}" @click="filter = 'completed'">completed</button>
       </div>
 
-      <div>
-        {{remaining}} items left
-      </div>
+        <div>
+          <transition name="fade">
+          <button v-if='showClearCompletedButton' @click="clearCompleted">Clear Completed</button>
+          </transition>
+        </div>
     </div>
-  </div>
+
+    <button @click="incrementGlobalCounter">++</button>
+    <button @click="$store.store.commit('addFixedAmount', 10)">add 10</button>
+    <div>{{globalCounter}}</div>
+
+    </div>
 </template>
 
 <script>
@@ -40,8 +58,9 @@ export default {
   data () {
     return {
       newTodo: '',
-      idForTodo:3,
+      idForTodo:'',
       beforeEditCache:'',
+      filter:'all',
       todos:[
         {
           'id': 1,
@@ -76,6 +95,22 @@ export default {
     },
     anyRemaining(){
       return this.remaining != 0;
+    },
+    globalCounter(){
+      return this.$store.store.state.count;
+    },
+    todosFiltered(){
+      if(this.filter=='all'){
+        return this.todos;
+      }else if (this.filter =='active') {
+        return this.todos.filter(todo => !todo.completed);
+      }else if (this.filter =='completed') {
+        return this.todos.filter(todo => todo.completed);
+      }
+      return this.todos;
+    },
+    showClearCompletedButton(){
+      return this.todos.filter(todo => todo.completed).length > 0;
     }
   },
   directives: {
@@ -100,7 +135,7 @@ export default {
       this.newTodo = '';
       this.idForTodo++;
     },
-    removeTodo(index){
+    removeTodo (index) {
       this.todos.splice(index,1);
     },
     editTodo(todo){
@@ -119,6 +154,12 @@ export default {
     },
     checkAllTodos(){
       this.todos.forEach((todo) => todo.completed = event.target.checked );
+    },
+    clearCompleted(){
+      this.todos = this.todos.filter(todo => !todo.completed);
+    },
+    incrementGlobalCounter(){
+      this.$store.store.commit('increment');
     }
   }
 }
@@ -126,6 +167,7 @@ export default {
 
 
 <style lang="scss">
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
 
 .todo-input{
   width:100%;
@@ -143,6 +185,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  animation-duration: 0.3s;
 }
 
 .remove-item{
@@ -210,4 +253,10 @@ button{
   background:lightgreen;
 }
 
+.fade-enter-active, .fade-leave-active{
+  transition: opacity .2s;
+}
+.fade-enter, .fade-leave-to{
+  opacity:0;
+}
 </style>

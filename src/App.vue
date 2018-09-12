@@ -2,21 +2,19 @@
   <div id="app" class="container">
     <img src="./assets/Ma-icon-bluesmall.png" class="logo">
     <todo-list></todo-list>
-   <!--<p>The safely stored number: {{safelyStoredNumber}}<p>-->
 
   </div>
 </template>
 
 <script>
-//import { mapGetters } from 'vuex'
+
 import TodoList from './components/TodoList';
-//import store from './store/index';
+
 
 export default {
   name: 'app',
   components:{
     TodoList,
-    //store
   }
 }
 </script>

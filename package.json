@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "es6-promise": "^4.2.4",
-    "vue": "^2.5.11",
+    "vue": "^2.5.17",
     "vuex": "^3.0.1"
   },
   "browserslist": [
@@ -31,7 +31,16 @@
     "sass-loader": "^6.0.7",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
-    "webpack": "^3.6.0",
+    "webpack": "^3.12.0",
     "webpack-dev-server": "^2.9.1"
-  }
+  },
+  "main": "webpack.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lennij/Vue-To-Do.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lennij/Vue-To-Do/issues"
+  },
+  "homepage": "https://github.com/lennij/Vue-To-Do#readme"
 }

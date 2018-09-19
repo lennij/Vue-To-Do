@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <img src="./assets/Ma-icon-bluesmall.png" class="logo">
     <todo-list></todo-list>
-    
+
 
   </div>
 </template>
@@ -39,6 +39,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
   font-size: 24px;
+  border: 1px solid #cdcdcd;
+  padding: 50px;
+  border-radius: 10px;
 }
 
 .logo{

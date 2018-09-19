@@ -12,11 +12,13 @@
     </div>
 
     <div>
-        <button @click="pluralize">Plural</button>
+        <button @click="pluralize">!</button>
+        
         <span class="remove-item" @click="removeTodo(index)">
         &times;
       </span>
     </div>
+
   </div>
 </template>
 
@@ -101,7 +103,7 @@
         eventBus.$emit('pluralize');
       },
       handlePluralize(){
-        this.title = this.title + 's';
+        this.title = this.title + '!';
         eventBus.$emit('finishedEdit', {
           'index': this.index,
           'todo' :{

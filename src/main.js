@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 import App from './App.vue'
 import store from './store/index.js';
 
+window.eventBus = new Vue();
+
 Vue.use(Vuex);
 
 new Vue({

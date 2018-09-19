@@ -11,13 +11,9 @@
       @keyup.escape="cancelEdit" v-focus>
     </div>
 
-    <div>
-        <button @click="pluralize">!</button>
-        
-        <span class="remove-item" @click="removeTodo(index)">
+      <div class="remove-item" @click="removeTodo(index)">
         &times;
-      </span>
-    </div>
+      </div>
 
   </div>
 </template>
@@ -46,14 +42,7 @@
         'completed': this.todo.completed,
         'editing': this.todo.editing,
         'beforeEditCache': '',
-
       }
-    },
-    created(){
-      eventBus.$on('pluralize', this.handlePluralize);
-    },
-    beforeDestroy(){
-      eventBus.$off('pluralize', this.handlePluralize);
     },
     watch:{
       checkAll() {
@@ -74,18 +63,21 @@
     },
     methods: {
       removeTodo(index){
-        eventBus.$emit('removedTodo', index);
+        this.$store.commit('removedTodo', index);
       },
       editTodo(){
         this.beforeEditCache = this.title;
         this.editing = true;
       },
       doneEdit(){
+        if(this.editing == false){
+          return;
+        }
         if(this.title.trim() == ''){
           this.title = this.beforeEditCache;
         }
         this.editing = false;
-        eventBus.$emit('finishedEdit', {
+        this.$store.commit('finishedEdit', {
           'index': this.index,
           'todo' :{
             'id': this.id,
@@ -99,21 +91,7 @@
         this.editing = false;
         this.title = this.beforeEditCache;
       },
-      pluralize(){
-        eventBus.$emit('pluralize');
-      },
-      handlePluralize(){
-        this.title = this.title + '!';
-        eventBus.$emit('finishedEdit', {
-          'index': this.index,
-          'todo' :{
-            'id': this.id,
-            'title': this.title,
-            'completed': this.completed,
-            'editing': this.editing,
-          }
-        });
-      }
-    }
+    },
+
   }
 </script>

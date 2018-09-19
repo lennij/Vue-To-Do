@@ -7,9 +7,7 @@
     leave-active-class="animated fadeOutDown">
       <todo-item v-for="(todo, index) in todosFiltered" :key="todo.id"
       :todo="todo" :index="index" :checkAll="!anyRemaining">
-
         <!-- TodoItem -->
-
       </todo-item>
     </transition-group>
 
@@ -28,8 +26,8 @@
     </div>
 
     <button @click="incrementGlobalCounter">++</button>
-    <button @click="$store.store.commit('addFixedAmount', 10)">add 10</button>
-    <!-- <div>{{globalCounter}}</div> -->
+    <button @click="addFixedAmount(10)">add 10</button>
+    <div>{{globalCounter}}</div>
 
     </div>
 </template>
@@ -41,7 +39,6 @@ import TodoItemsRemaining from './TodoItemsRemaining';
 import TodoCheckAll from './TodoCheckAll';
 import TodoFiltered from './TodoFiltered';
 import TodoClearCompleted from './TodoClearCompleted';
-
 
 export default {
   name: 'todo-list',
@@ -55,40 +52,24 @@ export default {
   data () {
     return {
       newTodo: '',
-      idForTodo:'3',
+      idForTodo:'5',
       beforeEditCache:'',
-      filter:'all',
-      todos:[
-        {
-          'id': 1,
-          'title': 'work with vuex store',
-          'completed': false,
-          'editing': false,
-        },
-        {
-          'id':2,
-          'title': 'color todos button',
-          'completed':false,
-          'editing': false,
-        }
-      ]
-    };
+      };
   },
   created(){
-    eventBus.$on('removedTodo', (index) => this.removeTodo(index));
-    eventBus.$on('finishedEdit', (data) => this.finishedEdit(data));
-    eventBus.$on('checkAllChanged', (checked) => this.checkAllTodos(checked));
-    eventBus.$on('filterChanged', (filter) => this.$store.state.filter = filter);
-    eventBus.$on('clearCompletedTodos', () => this.clearCompleted());
+
+    // eventBus.$on('checkAllChanged', (checked) => this.checkAllTodos(checked));
+    // eventBus.$on('clearCompletedTodos', () => this.clearCompleted());
   },
   beforeDestroy(){
-    eventBus.$off('removedTodo', (index) => this.removeTodo(index));
-    eventBus.$off('finishedEdit', (data) => this.finishedEdit(data));
-    eventBus.$off('checkAllChanged', (checked) => this.checkAllTodos(checked));
-    eventBus.$off('filterChanged', (filter) => this.$store.state.filter = filter);
-    eventBus.$off('clearCompletedTodos', () => this.clearCompleted());
+
+    // eventBus.$off('checkAllChanged', (checked) => this.checkAllTodos(checked));
+    // eventBus.$off('clearCompletedTodos', () => this.clearCompleted());
   },
   computed:{
+    todosFiltered(){
+      return this.$store.getters.todosFiltered;
+    },
     remaining(){
       return this.$store.state.todos.filter(todo => !todo.completed).length;
     },
@@ -96,25 +77,14 @@ export default {
       return this.remaining != 0;
     },
     globalCounter(){
-      return this.$store.store.state.count;
-
-
-    },
-    todosFiltered(){
-      if(this.$store.state.filter=='all'){
-        return this.$store.state.todos;
-      }else if (this.$store.state.filter =='active') {
-        return this.$store.state.todos.filter(todo => !todo.completed);
-      }else if (this.$store.state.filter =='completed') {
-        return this.$store.state.todos.filter(todo => todo.completed);
-      }
-      return this.$store.state.todos;
+      return this.$store.state.count;
     },
     showClearCompletedButton(){
       return this.$store.state.todos.filter(todo => todo.completed).length > 0;
     }
   },
   methods:{
+
     addTodo(){
       if(this.newTodo.trim() == 0){
         return
@@ -124,30 +94,24 @@ export default {
         title: this.newTodo,
         completed: false,
       });
-
       this.newTodo = '';
       this.idForTodo++;
     },
-    removeTodo (index) {
-      this.$store.state.todos.splice(index,1);
-    },
     checkAllTodos(){
-      this.$store.state.todos.forEach((todo) => todo.completed = event.target.checked );
+      this.$store.todos.forEach((todo) => todo.completed = event.target.checked );
     },
     clearCompleted(){
       this.$store.state.todos = this.$store.state.todos.filter(todo => !todo.completed);
     },
-    finishedEdit(data){
-     const index = this.$store.state.todos.findIndex(item => item.id == data.id);
-      this.$store.state.todos.splice(data.index, 1, data.todo);
-    },
     incrementGlobalCounter(){
-      this.$store.store.commit('increment');
+      this.$store.commit('increment');
+    },
+    addFixedAmount(){
+      this.$store.commit('addFixedAmount', 10)
     }
-  }
+  },
 }
 </script>
-
 
 <style lang="scss">
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");

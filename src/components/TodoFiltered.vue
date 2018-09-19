@@ -17,7 +17,7 @@
     methods:{
       changeFilter(filter){
         this.filter = filter;
-        eventBus.$emit('filterChanged', filter);
+        this.$store.commit('filterChanged', filter);
       }
     }
   }

@@ -20,7 +20,7 @@
       <todo-filtered></todo-filtered>
         <div>
           <transition name="fade">
-            <todo-clear-completed :showClearCompletedButton='showClearCompletedButton'></todo-clear-completed>
+            <todo-clear-completed></todo-clear-completed>
           </transition>
         </div>
     </div>
@@ -52,19 +52,9 @@ export default {
   data () {
     return {
       newTodo: '',
-      idForTodo:'5',
+      idForTodo:'4',
       beforeEditCache:'',
       };
-  },
-  created(){
-
-    // eventBus.$on('checkAllChanged', (checked) => this.checkAllTodos(checked));
-    // eventBus.$on('clearCompletedTodos', () => this.clearCompleted());
-  },
-  beforeDestroy(){
-
-    // eventBus.$off('checkAllChanged', (checked) => this.checkAllTodos(checked));
-    // eventBus.$off('clearCompletedTodos', () => this.clearCompleted());
   },
   computed:{
     todosFiltered(){
@@ -79,9 +69,7 @@ export default {
     globalCounter(){
       return this.$store.state.count;
     },
-    showClearCompletedButton(){
-      return this.$store.state.todos.filter(todo => todo.completed).length > 0;
-    }
+
   },
   methods:{
 
@@ -96,12 +84,6 @@ export default {
       });
       this.newTodo = '';
       this.idForTodo++;
-    },
-    checkAllTodos(){
-      this.$store.todos.forEach((todo) => todo.completed = event.target.checked );
-    },
-    clearCompleted(){
-      this.$store.state.todos = this.$store.state.todos.filter(todo => !todo.completed);
     },
     incrementGlobalCounter(){
       this.$store.commit('increment');

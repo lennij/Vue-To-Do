@@ -29,6 +29,9 @@ export const store = new Vuex.Store({
     ]
   },
   mutations: {
+    checkAllTodos(state, checked){
+    state.todos.forEach((todo) => todo.completed = event.target.checked );
+    },
     filterChanged(state, filter){
       state.filter = filter;
     },
@@ -44,7 +47,11 @@ export const store = new Vuex.Store({
     },
     addFixedAmount(state, data){
       state.count = state.count + data;
-    }
+    },
+    clearCompletedTodos(state){
+      state.todos = state.todos.filter(todo => !todo.completed);
+      console.log(state.todos);
+    },
   },
   getters:{
     todosFiltered: state => {

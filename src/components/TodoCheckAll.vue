@@ -17,7 +17,7 @@
     },
     methods:{
       allChecked(){
-        eventBus.$emit('checkAllChanged', this.anyRemaining);
+        this.$store.commit('checkAllTodos', this.anyRemaining);
       }
     }
   }

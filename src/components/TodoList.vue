@@ -53,7 +53,7 @@ export default {
     return {
       newTodo: '',
       idForTodo:'4',
-      beforeEditCache:'',
+      // beforeEditCache:'',
       };
   },
   computed:{

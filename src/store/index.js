@@ -50,19 +50,19 @@ export const store = new Vuex.Store({
     },
     clearCompletedTodos(state){
       state.todos = state.todos.filter(todo => !todo.completed);
-      console.log(state.todos);
     },
+    editTodo(state, index){
+      state.todos[index].editing = true;
+    },
+
   },
   getters:{
     todosFiltered: state => {
-      if(state.filter=='all'){
-        console.log(state.todos);
+      if(state.filter === 'all'){
          return state.todos;
-      }else if (state.filter =='active') {
-        console.log(state.todos.filter(todo => !todo.completed));
+      }else if (state.filter === 'active') {
          return state.todos.filter(todo => !todo.completed);
-      }else if (state.filter =='completed') {
-        console.log(state.todos.filter(todo => todo.completed));
+      }else if (state.filter === 'completed') {
          return state.todos.filter(todo => todo.completed);
       }
       return state.todos;

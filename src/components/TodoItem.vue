@@ -1,19 +1,19 @@
 <template>
   <div class="todo-item">
     <div class="todo-item-left">
-      <input type="checkbox" v-model="completed" @change = "doneEdit" >
-      <div v-if="!editing" @dblclick="editTodo" class="todo-item-label"
-      :class="{ completed : completed }">
-        {{ title }}
+      <input type="checkbox" v-model="todo.completed" @change = "doneEdit(index, todo.title)" >
+      <div v-if="!todo.editing" @dblclick="editTodo(index, todo.title)" class="todo-item-label"
+      :class="{ 'completed' : todo.completed }">
+        {{ todo.title }}
       </div>
-      <input v-else class="todo-item-edit" type="text" v-model="title"
-      @blur="doneEdit" @keyup.enter="doneEdit"
+      <input v-else class="todo-item-edit" type="text" v-model="todo.title"
+      @blur="doneEdit(index, todo.title)" @keyup.enter="doneEdit(index, todo.title)"
       @keyup.escape="cancelEdit" v-focus>
     </div>
 
-      <div class="remove-item" @click="removeTodo(index)">
-        &times;
-      </div>
+    <div class="remove-item" @click="removeTodo(index)">
+      &times;
+    </div>
 
   </div>
 </template>
@@ -35,15 +35,12 @@
         required: true,
       }
     },
-    data(){
+    data () {
       return {
-        'id': this.todo.id,
-        'title': this.todo.title,
-        'completed': this.todo.completed,
-        'editing': this.todo.editing,
-        'beforeEditCache': '',
-      }
+        beforeEditCache:'',
+      };
     },
+
     watch:{
       checkAll() {
         if(this.checkAll){
@@ -65,25 +62,28 @@
       removeTodo(index){
         this.$store.commit('removedTodo', index);
       },
-      editTodo(){
-        this.beforeEditCache = this.title;
-        this.editing = true;
+      editTodo(index, cachedTitle){
+        this.beforeEditCache = cachedTitle;
+        this.$store.commit('editTodo', index);
       },
-      doneEdit(){
-        if(this.editing == false){
+      doneEdit(index, title){
+        var titel = title;
+        if(this.$store.state.todos[index].editing === false){
           return;
         }
-        if(this.title.trim() == ''){
-          this.title = this.beforeEditCache;
+        if(title === ''){
+          titel = this.beforeEditCache;
+          console.log(titel);
         }
-        this.editing = false;
-        this.$store.commit('finishedEdit', {
-          'index': this.index,
+
+        this.$store.commit('finishedEdit',
+        {
+          'index': index,
           'todo' :{
-            'id': this.id,
-            'title': this.title,
-            'completed': this.completed,
-            'editing': this.editing,
+            'id': this.$store.state.todos[index].id,
+            'title': titel,
+            'completed': this.$store.state.todos[index].completed,
+            'editing': false,
           }
         });
       },
